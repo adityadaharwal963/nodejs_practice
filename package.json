@@ -1,0 +1,23 @@
+{
+  "name": "customer",
+  "version": "1.0.0",
+  "description": "node project",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityadaharwal963/customer.git"
+  },
+  "author": "aditya daharwal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adityadaharwal963/customer/issues"
+  },
+  "homepage": "https://github.com/adityadaharwal963/customer#readme",
+  "dependencies": {
+    "express": "^4.18.3",
+    "uuid": "^9.0.1"
+  }
+}
