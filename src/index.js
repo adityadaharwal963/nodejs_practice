@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+const Customer = require('../modules/customer')
 mongoose.set('strictQuery',false);
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
@@ -41,12 +41,24 @@ const customers = [
     }
 ]
 
-app.get('/',(req,res)=>{
-    res.send("Welcome");
+const customer = new Customer({
+    name: "adi",
+    industry:"tech"
 });
 
-app.get('/api/customer',(req,res) =>{
-    res.send({"customer":customers});
+//customer.save();
+app.get('/',(req,res)=>{
+    res.send(customer);
+});
+
+app.get('/api/customer',async (req,res) =>{
+    try{
+        const result = await Customer.find()
+        res.json({"customer":result});
+    }catch(e){
+        res.sendStatus(500).json({error:e.message});
+    }
+    
 })
 
 app.post('/',(req,res)=> {
@@ -55,7 +67,20 @@ app.post('/',(req,res)=> {
 
 app.post('/api/customer',(req,res)=> {
     console.log(req.body);
-    res.send(req.body);
+
+    const customer = new Customer({
+        name : req.body.name,
+        industry : req.body.industry
+    });
+        // const customer = new Customer(req.body);
+    try{
+        customer.save();
+        res.status(201).json({customer});
+    }catch(e){
+        res.status(400).json({error:e.message});
+    }
+
+    
 });
 
 
