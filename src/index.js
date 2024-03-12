@@ -1,6 +1,17 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
+mongoose.set('strictQuery',false);
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
 const app = express();
-const PORT = 3000;
+const CONNECTION = process.env.CONNECTION;
+const PORT = process.env.PORT || 3000;
+
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 const json = {
     "key":"value",
     "name":"JAG",
@@ -14,14 +25,50 @@ const json = {
         "name":"coco"}
     ]
 }
-app.get('/',(req,res) =>{
-    res.send({"data":json.nest});
+
+const customers = [
+    {
+        "name" : "pande",
+        "industry": "Web dev"
+    },
+    {
+        "name":"jamjar",
+        "industry":"blockchain"
+    },
+    {
+        "name":"dadliwar",
+        "industry":"CP"
+    }
+]
+
+app.get('/',(req,res)=>{
+    res.send("Welcome");
+});
+
+app.get('/api/customer',(req,res) =>{
+    res.send({"customer":customers});
 })
 
 app.post('/',(req,res)=> {
     res.send('working with post req ');
 });
-app.listen(PORT,() => {
-    console.log("app listing for port 3000");
+
+app.post('/api/customer',(req,res)=> {
+    console.log(req.body);
+    res.send(req.body);
 });
 
+
+const start = async() => {
+    try{
+        await mongoose.connect(CONNECTION);
+        app.listen(PORT,() => {
+            console.log("app listing for port " + PORT);
+        });
+    }catch(error){
+        console.log(error.message);
+    }
+    
+};
+
+start();
